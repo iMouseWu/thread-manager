@@ -1,11 +1,11 @@
 package thread.dao;
 
-import thread.domain.Thread;
+import thread.domain.ThreadDO;
 
 public interface ExecutorDao {
 
-	Thread selectExecutor(String threadId);
+    ThreadDO selectExecutor(String threadId);
 
-	void insertExecutor(Thread xpThread);
+    void insertExecutor(ThreadDO xpThread);
 
 }
