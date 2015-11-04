@@ -3,9 +3,12 @@ package thread;
 import configuration.PoolConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import thread.constants.PoolStrategy;
 import thread.constants.TaskStrategy;
-import thread.dao.ExecutorDao;
+import thread.dao.ExecutorTaskDao;
 import thread.domain.TaskProperty;
+import thread.domain.ThreadDO;
+import thread.domain.impl.DefaultThreadDO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,14 +29,27 @@ public class ExecutorTaskManagerImpl implements ExecutorTaskManager {
 
     private static final Integer DEFAULTCOUNT = 10;
 
-    private ExecutorDao executorDao;
+    private ExecutorTaskDao executorDao;
 
     private Logger logger = LoggerFactory.getLogger(ExecutorTaskManagerImpl.class);
 
     @Override
     public void excute(final ExecutorTask executorTask) {
-        executorDao.selectExecutor(executorTask.getTaskId())
+        PoolStrategy poolStrategy = poolConfiguration.getPoolStrategy();
 
+        ThreadDO threadDO = null;
+        if (poolStrategy == PoolStrategy.WITHIP) {
+            threadDO = executorDao.selectExecutorTask(executorTask.getTaskId(), executorTask.getIp());
+        } else if (poolStrategy == PoolStrategy.WITHOUTIP) {
+            threadDO = executorDao.selectExecutorTask(executorTask.getTaskId());
+        } else {
+            throw new RuntimeException("poolStrategy cannot find " + poolStrategy);
+        }
+        if (null != threadDO) {
+            logger.info("taskId is {},Ip is {} has commit repeat", executorTask.getTaskId(), executorTask.getIp());
+            return;
+        }
+        executorDao.insertExecutorTask(createThreadDO(executorTask));
 
         TaskProperty taskProperty = executorTask.getTaskProperty();
         if (null == taskProperty) {
@@ -58,10 +74,15 @@ public class ExecutorTaskManagerImpl implements ExecutorTaskManager {
 
         Work work = new Work(executorTask);
         pool.execute(work);
-
     }
 
-
+    private DefaultThreadDO createThreadDO(ExecutorTask executorTask) {
+        DefaultThreadDO defaultThreadDO = new DefaultThreadDO();
+        defaultThreadDO.setThreadId(executorTask.getTaskId());
+        defaultThreadDO.setThreadName(executorTask.getTaskName());
+        defaultThreadDO.setIp(executorTask.getIp());
+        return defaultThreadDO;
+    }
 
     private ScheduledThreadPoolExecutor gainPool(TaskProperty taskProperty) {
         ScheduledThreadPoolExecutor pool = null;
@@ -109,12 +130,20 @@ public class ExecutorTaskManagerImpl implements ExecutorTaskManager {
             } catch (Throwable e) {
                 logger.error("", e);
             } finally {
-                callBack();
+                callBack(executorTask);
             }
         }
     }
 
-    private void callBack() {
+    private void callBack(ExecutorTask executorTask) {
+        PoolStrategy poolStrategy = poolConfiguration.getPoolStrategy();
+        if (poolStrategy == PoolStrategy.WITHIP) {
+            executorDao.deleteExcutorTask(executorTask.getTaskId(), executorTask.getIp());
+        } else if (poolStrategy == PoolStrategy.WITHOUTIP) {
+            executorDao.deleteExcutorTask(executorTask.getTaskId());
+        } else {
+            throw new RuntimeException("poolStrategy cannot find " + poolStrategy);
+        }
 
     }
 

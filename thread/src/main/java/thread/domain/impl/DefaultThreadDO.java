@@ -11,9 +11,20 @@ public class DefaultThreadDO implements ThreadDO {
 
     private String threadId;
 
+    private String ip;
+
     @Override
     public String getThreadName() {
         return threadName;
+    }
+
+    @Override
+    public String getIp() {
+        return null;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
     public void setThreadName(String threadName) {

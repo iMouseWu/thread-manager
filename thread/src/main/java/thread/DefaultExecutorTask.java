@@ -10,6 +10,11 @@ public class DefaultExecutorTask implements ExecutorTask {
     }
 
     @Override
+    public String getIp() {
+        return null;
+    }
+
+    @Override
     public String getTaskName() {
         // TODO Auto-generated method stub
         return null;

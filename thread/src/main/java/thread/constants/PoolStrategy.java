@@ -1,17 +1,17 @@
 package thread.constants;
 
 /**
- * Created by wuhao on 15/11/3.
+ * @author wuhao
  */
-public enum TaskStrategy {
+public enum PoolStrategy {
 
-    taskPriority(0, "按照优先级分配线程池"), taskGroup(1, "按照任务组来分配线程池");
+    WITHIP(0, "以ip策略过滤线程,不同机器IP线程Id可以相同"), WITHOUTIP(1, "不以IP过滤线程,不同线程Id不能重复");
 
     private int code;
 
     private String desc;
 
-    TaskStrategy(int code, String desc) {
+    PoolStrategy(int code, String desc) {
         this.code = code;
         this.desc = desc;
     }
