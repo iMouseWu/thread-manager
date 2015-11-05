@@ -1,19 +1,26 @@
 package thread.dao;
 
+import thread.constants.ThreadStatus;
 import thread.domain.ThreadDO;
-import thread.domain.impl.DefaultThreadDO;
 
 public interface ExecutorTaskDao {
 
+    /**
+     * 查询任务(除掉完成状态的)
+     *
+     * @param threadId
+     * @param threadIp
+     * @return
+     */
     ThreadDO selectExecutorTask(String threadId, String threadIp);
-
-    ThreadDO selectExecutorTask(String threadId);
 
     boolean insertExecutorTask(ThreadDO xpThread);
 
     boolean deleteExcutorTask(String threadId, String ip);
 
-    boolean deleteExcutorTask(String threadId);
+    boolean updateExcutorTaskStatus(String threadId, String ip, ThreadStatus origthreadStatus, ThreadStatus desthreadStatus);
+
+    boolean updateExcutorTaskStatusAndRetryTime(String threadId, String ip, ThreadStatus origthreadStatus, ThreadStatus desthreadStatus);
 
 
 }

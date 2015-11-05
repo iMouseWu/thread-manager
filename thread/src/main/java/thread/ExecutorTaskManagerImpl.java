@@ -3,8 +3,8 @@ package thread;
 import configuration.PoolConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import thread.constants.PoolStrategy;
 import thread.constants.TaskStrategy;
+import thread.constants.ThreadStatus;
 import thread.dao.ExecutorTaskDao;
 import thread.domain.TaskProperty;
 import thread.domain.ThreadDO;
@@ -35,22 +35,9 @@ public class ExecutorTaskManagerImpl implements ExecutorTaskManager {
 
     @Override
     public void excute(final ExecutorTask executorTask) {
-        PoolStrategy poolStrategy = poolConfiguration.getPoolStrategy();
-
-        ThreadDO threadDO = null;
-        if (poolStrategy == PoolStrategy.WITHIP) {
-            threadDO = executorDao.selectExecutorTask(executorTask.getTaskId(), executorTask.getIp());
-        } else if (poolStrategy == PoolStrategy.WITHOUTIP) {
-            threadDO = executorDao.selectExecutorTask(executorTask.getTaskId());
-        } else {
-            throw new RuntimeException("poolStrategy cannot find " + poolStrategy);
-        }
-        if (null != threadDO) {
-            logger.info("taskId is {},Ip is {} has commit repeat", executorTask.getTaskId(), executorTask.getIp());
+        if (!needContinueAndInit(executorTask)) {
             return;
         }
-        executorDao.insertExecutorTask(createThreadDO(executorTask));
-
         TaskProperty taskProperty = executorTask.getTaskProperty();
         if (null == taskProperty) {
             taskProperty = new TaskProperty() {
@@ -76,11 +63,25 @@ public class ExecutorTaskManagerImpl implements ExecutorTaskManager {
         pool.execute(work);
     }
 
+    private boolean needContinueAndInit(ExecutorTask executorTask) {
+        boolean needContinue = false;
+        ThreadDO threadDO = executorDao.selectExecutorTask(executorTask.getTaskId(), executorTask.getIp());
+        if (null == threadDO) {
+            needContinue = executorDao.insertExecutorTask(createThreadDO(executorTask));
+            return needContinue;
+        }
+        if (threadDO.getThreadStatus() == ThreadStatus.EXCEPTION) {
+            needContinue = executorDao.updateExcutorTaskStatusAndRetryTime(threadDO.getThreadId(), threadDO.getIp(), ThreadStatus.EXCEPTION, ThreadStatus.INIT);
+        }
+        return needContinue;
+    }
+
     private DefaultThreadDO createThreadDO(ExecutorTask executorTask) {
         DefaultThreadDO defaultThreadDO = new DefaultThreadDO();
         defaultThreadDO.setThreadId(executorTask.getTaskId());
         defaultThreadDO.setThreadName(executorTask.getTaskName());
         defaultThreadDO.setIp(executorTask.getIp());
+        defaultThreadDO.setThreadStatus(ThreadStatus.INIT);
         return defaultThreadDO;
     }
 
@@ -125,26 +126,18 @@ public class ExecutorTaskManagerImpl implements ExecutorTaskManager {
 
         @Override
         public void run() {
+            String taskId = executorTask.getTaskId();
+            String ip = executorTask.getIp();
             try {
+                executorDao.updateExcutorTaskStatus(taskId, ip, ThreadStatus.INIT, ThreadStatus.DOING);
                 executorTask.execute();
+                executorDao.updateExcutorTaskStatus(taskId, ip, ThreadStatus.DOING, ThreadStatus.DELETE);
             } catch (Throwable e) {
+                executorDao.updateExcutorTaskStatus(taskId, ip, ThreadStatus.DOING, ThreadStatus.EXCEPTION);
                 logger.error("", e);
             } finally {
-                callBack(executorTask);
+//                callBack(executorTask);
             }
         }
     }
-
-    private void callBack(ExecutorTask executorTask) {
-        PoolStrategy poolStrategy = poolConfiguration.getPoolStrategy();
-        if (poolStrategy == PoolStrategy.WITHIP) {
-            executorDao.deleteExcutorTask(executorTask.getTaskId(), executorTask.getIp());
-        } else if (poolStrategy == PoolStrategy.WITHOUTIP) {
-            executorDao.deleteExcutorTask(executorTask.getTaskId());
-        } else {
-            throw new RuntimeException("poolStrategy cannot find " + poolStrategy);
-        }
-
-    }
-
 }

@@ -3,17 +3,15 @@ package thread.constants;
 /**
  * @author wuhao
  */
-public enum PoolStrategy {
-
-    WITHIP(0, "以ip策略过滤线程,不同机器IP线程Id可以相同"), WITHOUTIP(1, "不以IP过滤线程,不同线程Id不能重复");
+public enum ThreadStatus {
+    INIT(0, "初始化"), DOING(1, "执行中"), DELETE(2, "执行完成"),EXCEPTION(3,"执行异常");
 
     private int code;
 
     private String desc;
 
-    PoolStrategy(int code, String desc) {
-        this.code = code;
-        this.desc = desc;
+    private ThreadStatus(int code, String desc) {
+
     }
 
     public int getCode() {

@@ -1,5 +1,6 @@
 package thread.domain.impl;
 
+import thread.constants.ThreadStatus;
 import thread.domain.ThreadDO;
 
 /**
@@ -13,6 +14,10 @@ public class DefaultThreadDO implements ThreadDO {
 
     private String ip;
 
+    private ThreadStatus threadStatus;
+
+    private int retryTime;
+
     @Override
     public String getThreadName() {
         return threadName;
@@ -20,7 +25,25 @@ public class DefaultThreadDO implements ThreadDO {
 
     @Override
     public String getIp() {
-        return null;
+        return ip;
+    }
+
+    @Override
+    public ThreadStatus getThreadStatus() {
+        return threadStatus;
+    }
+
+    @Override
+    public int getRetryTime() {
+        return 0;
+    }
+
+    public void setRetryTime(int retryTime) {
+        this.retryTime = retryTime;
+    }
+
+    public void setThreadStatus(ThreadStatus threadStatus) {
+        this.threadStatus = threadStatus;
     }
 
     public void setIp(String ip) {

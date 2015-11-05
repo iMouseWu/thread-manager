@@ -3,6 +3,7 @@ package thread.dao;
 import java.util.HashMap;
 import java.util.Map;
 
+import thread.constants.ThreadStatus;
 import thread.domain.ThreadDO;
 
 public class ExecutorTaskDaoImpl implements ExecutorTaskDao {
@@ -31,6 +32,11 @@ public class ExecutorTaskDaoImpl implements ExecutorTaskDao {
 
     @Override
     public boolean deleteExcutorTask(String threadId) {
+        return false;
+    }
+
+    @Override
+    public boolean updateExcutorTaskStatus(String threadId, String ip, ThreadStatus origthreadStatus, ThreadStatus desthreadStatus) {
         return false;
     }
 
