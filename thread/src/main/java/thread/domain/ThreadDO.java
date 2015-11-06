@@ -38,4 +38,13 @@ public interface ThreadDO {
      */
     int getRetryTime();
 
+    /**
+     * 查看下次执行时间
+     * @return
+     */
+    long getExecuteTime();
+
+
+    void execute();
+
 }

@@ -16,11 +16,6 @@ public class ExecutorTaskDaoImpl implements ExecutorTaskDao {
     }
 
     @Override
-    public ThreadDO selectExecutorTask(String threadId) {
-        return null;
-    }
-
-    @Override
     public boolean insertExecutorTask(ThreadDO xpThread) {
         return false;
     }
@@ -31,12 +26,12 @@ public class ExecutorTaskDaoImpl implements ExecutorTaskDao {
     }
 
     @Override
-    public boolean deleteExcutorTask(String threadId) {
+    public boolean updateExcutorTaskStatus(String threadId, String ip, ThreadStatus origthreadStatus, ThreadStatus desthreadStatus) {
         return false;
     }
 
     @Override
-    public boolean updateExcutorTaskStatus(String threadId, String ip, ThreadStatus origthreadStatus, ThreadStatus desthreadStatus) {
+    public boolean updateExcutorTaskStatusAndRetryTime(String threadId, String ip, ThreadStatus origthreadStatus, ThreadStatus desthreadStatus) {
         return false;
     }
 

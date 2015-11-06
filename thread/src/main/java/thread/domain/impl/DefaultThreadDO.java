@@ -1,5 +1,6 @@
 package thread.domain.impl;
 
+import thread.ExecutorTask;
 import thread.constants.ThreadStatus;
 import thread.domain.ThreadDO;
 
@@ -8,24 +9,28 @@ import thread.domain.ThreadDO;
  */
 public class DefaultThreadDO implements ThreadDO {
 
-    private String threadName;
-
-    private String threadId;
-
-    private String ip;
+    private ExecutorTask executorTask;
 
     private ThreadStatus threadStatus;
 
     private int retryTime;
 
+    public DefaultThreadDO() {
+
+    }
+
+    public DefaultThreadDO(ExecutorTask executorTask) {
+        this.executorTask = executorTask;
+    }
+
     @Override
     public String getThreadName() {
-        return threadName;
+        return executorTask.getTaskName();
     }
 
     @Override
     public String getIp() {
-        return ip;
+        return executorTask.getIp();
     }
 
     @Override
@@ -35,32 +40,29 @@ public class DefaultThreadDO implements ThreadDO {
 
     @Override
     public int getRetryTime() {
+        return retryTime;
+    }
+
+    @Override
+    public long getExecuteTime() {
         return 0;
     }
 
-    public void setRetryTime(int retryTime) {
-        this.retryTime = retryTime;
+    @Override
+    public void execute() {
+        executorTask.execute();;
     }
 
     public void setThreadStatus(ThreadStatus threadStatus) {
         this.threadStatus = threadStatus;
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public void setThreadName(String threadName) {
-        this.threadName = threadName;
-    }
-
     @Override
     public String getThreadId() {
-        return threadId;
+        return executorTask.getTaskId();
     }
 
-    public void setThreadId(String threadId) {
-        this.threadId = threadId;
+    public void setExecutorTask(ExecutorTask executorTask) {
+        this.executorTask = executorTask;
     }
-
 }

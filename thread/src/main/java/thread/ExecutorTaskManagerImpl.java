@@ -31,6 +31,8 @@ public class ExecutorTaskManagerImpl implements ExecutorTaskManager {
 
     private ExecutorTaskDao executorDao;
 
+    private ExceptionTaskResolve exceptionTaskResolve;
+
     private Logger logger = LoggerFactory.getLogger(ExecutorTaskManagerImpl.class);
 
     @Override
@@ -134,6 +136,7 @@ public class ExecutorTaskManagerImpl implements ExecutorTaskManager {
                 executorDao.updateExcutorTaskStatus(taskId, ip, ThreadStatus.DOING, ThreadStatus.DELETE);
             } catch (Throwable e) {
                 executorDao.updateExcutorTaskStatus(taskId, ip, ThreadStatus.DOING, ThreadStatus.EXCEPTION);
+                exceptionTaskResolve.
                 logger.error("", e);
             } finally {
 //                callBack(executorTask);
