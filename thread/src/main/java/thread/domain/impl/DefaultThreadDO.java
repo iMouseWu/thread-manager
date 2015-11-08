@@ -2,6 +2,7 @@ package thread.domain.impl;
 
 import thread.ExecutorTask;
 import thread.constants.ThreadStatus;
+import thread.domain.TaskProperty;
 import thread.domain.ThreadDO;
 
 /**
@@ -24,13 +25,18 @@ public class DefaultThreadDO implements ThreadDO {
     }
 
     @Override
-    public String getThreadName() {
-        return executorTask.getTaskName();
+    public String getTaskId() {
+        return executorTask.getTaskId();
     }
 
     @Override
     public String getIp() {
         return executorTask.getIp();
+    }
+
+    @Override
+    public String getTaskName() {
+        return executorTask.getTaskName();
     }
 
     @Override
@@ -50,16 +56,16 @@ public class DefaultThreadDO implements ThreadDO {
 
     @Override
     public void execute() {
-        executorTask.execute();;
+        executorTask.execute();
+    }
+
+    @Override
+    public TaskProperty getTaskProperty() {
+        return null;
     }
 
     public void setThreadStatus(ThreadStatus threadStatus) {
         this.threadStatus = threadStatus;
-    }
-
-    @Override
-    public String getThreadId() {
-        return executorTask.getTaskId();
     }
 
     public void setExecutorTask(ExecutorTask executorTask) {

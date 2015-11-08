@@ -1,5 +1,6 @@
 package thread.domain;
 
+import thread.ExecutorTask;
 import thread.constants.ThreadStatus;
 
 /**
@@ -7,22 +8,8 @@ import thread.constants.ThreadStatus;
  *
  * @author wuhao
  */
-public interface ThreadDO {
+public interface ThreadDO extends ExecutorTask{
 
-    /**
-     * 线程实体,唯一标示一个线程
-     */
-    String getThreadId();
-
-    /**
-     * 线程名称
-     */
-    String getThreadName();
-
-    /**
-     * 线程提交的IP 地址
-     */
-    String getIp();
 
     /**
      * 获取线程状态
@@ -45,6 +32,5 @@ public interface ThreadDO {
     long getExecuteTime();
 
 
-    void execute();
 
 }

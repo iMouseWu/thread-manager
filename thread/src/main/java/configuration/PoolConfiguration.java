@@ -1,10 +1,9 @@
 package configuration;
 
-import java.util.List;
-
 import configuration.domain.GroupPoolConfig;
 import configuration.domain.PriorityPoolConfig;
-import thread.constants.PoolStrategy;
+
+import java.util.List;
 
 /**
  * 线程配置
@@ -31,7 +30,6 @@ public interface PoolConfiguration {
 
     int getGroupPoolCount(int groupId);
 
-    PoolStrategy getPoolStrategy();
 
 
 }

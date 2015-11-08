@@ -21,9 +21,9 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
  */
 public class ExecutorTaskManagerImpl implements ExecutorTaskManager {
 
-    private Map<Integer, ScheduledThreadPoolExecutor> priorityPoolMap = new HashMap<>();
+    private static Map<Integer, ScheduledThreadPoolExecutor> priorityPoolMap = new HashMap<>();
 
-    private Map<Integer, ScheduledThreadPoolExecutor> groupPoolMap = new HashMap<>();
+    private static Map<Integer, ScheduledThreadPoolExecutor> groupPoolMap = new HashMap<>();
 
     private PoolConfiguration poolConfiguration;
 
@@ -73,16 +73,13 @@ public class ExecutorTaskManagerImpl implements ExecutorTaskManager {
             return needContinue;
         }
         if (threadDO.getThreadStatus() == ThreadStatus.EXCEPTION) {
-            needContinue = executorDao.updateExcutorTaskStatusAndRetryTime(threadDO.getThreadId(), threadDO.getIp(), ThreadStatus.EXCEPTION, ThreadStatus.INIT);
+            needContinue = executorDao.updateExcutorTaskStatusAndRetryTime(threadDO.getTaskId(), threadDO.getIp(), ThreadStatus.EXCEPTION, ThreadStatus.INIT);
         }
         return needContinue;
     }
 
     private DefaultThreadDO createThreadDO(ExecutorTask executorTask) {
-        DefaultThreadDO defaultThreadDO = new DefaultThreadDO();
-        defaultThreadDO.setThreadId(executorTask.getTaskId());
-        defaultThreadDO.setThreadName(executorTask.getTaskName());
-        defaultThreadDO.setIp(executorTask.getIp());
+        DefaultThreadDO defaultThreadDO = new DefaultThreadDO(executorTask);
         defaultThreadDO.setThreadStatus(ThreadStatus.INIT);
         return defaultThreadDO;
     }
@@ -136,7 +133,6 @@ public class ExecutorTaskManagerImpl implements ExecutorTaskManager {
                 executorDao.updateExcutorTaskStatus(taskId, ip, ThreadStatus.DOING, ThreadStatus.DELETE);
             } catch (Throwable e) {
                 executorDao.updateExcutorTaskStatus(taskId, ip, ThreadStatus.DOING, ThreadStatus.EXCEPTION);
-                exceptionTaskResolve.
                 logger.error("", e);
             } finally {
 //                callBack(executorTask);
