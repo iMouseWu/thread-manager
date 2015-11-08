@@ -132,11 +132,24 @@ public class ExecutorTaskManagerImpl implements ExecutorTaskManager {
                 executorTask.execute();
                 executorDao.updateExcutorTaskStatus(taskId, ip, ThreadStatus.DOING, ThreadStatus.DELETE);
             } catch (Throwable e) {
-                executorDao.updateExcutorTaskStatus(taskId, ip, ThreadStatus.DOING, ThreadStatus.EXCEPTION);
+                ThreadDO threadDO = executorDao.selectExecutorTask(taskId, ip);
+                doAfterException(threadDO);
                 logger.error("", e);
             } finally {
 //                callBack(executorTask);
             }
+        }
+
+        private void doAfterException(ThreadDO threadDO) {
+            int retryTime = threadDO.getRetryTime();
+            String taskId = threadDO.getTaskId();
+            String ip = executorTask.getIp();
+            long nextExecuteTime = poolConfiguration.getNextExecuteTime(retryTime);
+            if (nextExecuteTime == 0L) {
+                executorDao.updateExcutorTaskStatus(taskId, ip, ThreadStatus.DOING, ThreadStatus.FAILED);
+                return;
+            }
+            executorDao.updateExcutorTaskStatusAndExecuteTime(taskId, ip, ThreadStatus.DOING, ThreadStatus.EXCEPTION, nextExecuteTime);
         }
     }
 }

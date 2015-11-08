@@ -25,6 +25,8 @@ public interface ThreadDO extends ExecutorTask{
      */
     int getRetryTime();
 
+
+
     /**
      * 查看下次执行时间
      * @return

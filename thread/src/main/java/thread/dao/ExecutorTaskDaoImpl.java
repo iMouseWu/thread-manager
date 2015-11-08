@@ -1,10 +1,10 @@
 package thread.dao;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import thread.constants.ThreadStatus;
 import thread.domain.ThreadDO;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ExecutorTaskDaoImpl implements ExecutorTaskDao {
 
@@ -34,6 +34,12 @@ public class ExecutorTaskDaoImpl implements ExecutorTaskDao {
     public boolean updateExcutorTaskStatusAndRetryTime(String threadId, String ip, ThreadStatus origthreadStatus, ThreadStatus desthreadStatus) {
         return false;
     }
+
+    @Override
+    public boolean updateExcutorTaskStatusAndExecuteTime(String threadId, String ip, ThreadStatus origthreadStatus, ThreadStatus desthreadStatus, long executeTime) {
+        return false;
+    }
+
 
 
 }

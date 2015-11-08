@@ -20,7 +20,10 @@ public interface ExecutorTaskDao {
 
     boolean updateExcutorTaskStatus(String threadId, String ip, ThreadStatus origthreadStatus, ThreadStatus desthreadStatus);
 
+
     boolean updateExcutorTaskStatusAndRetryTime(String threadId, String ip, ThreadStatus origthreadStatus, ThreadStatus desthreadStatus);
+
+    boolean updateExcutorTaskStatusAndExecuteTime(String threadId, String ip, ThreadStatus origthreadStatus, ThreadStatus desthreadStatus,long executeTime);
 
 
 }

@@ -30,6 +30,12 @@ public interface PoolConfiguration {
 
     int getGroupPoolCount(int groupId);
 
+    /**
+     * 根据执行的次数,返回下次执行的时间
+     *
+     * @return
+     */
+    long getNextExecuteTime(int retryTime);
 
 
 }
