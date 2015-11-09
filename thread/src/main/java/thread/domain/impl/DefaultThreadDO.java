@@ -16,6 +16,8 @@ public class DefaultThreadDO implements ThreadDO {
 
     private int retryTime;
 
+    private long executeTime;
+
     public DefaultThreadDO() {
 
     }
@@ -50,8 +52,19 @@ public class DefaultThreadDO implements ThreadDO {
     }
 
     @Override
+    public void setRetryTime(int retryTime) {
+        this.retryTime = retryTime;
+    }
+
+    @Override
     public long getExecuteTime() {
-        return 0;
+        return executeTime;
+    }
+
+    @Override
+    public void setExecuteTime(long executeTime) {
+        this.executeTime = executeTime;
+
     }
 
     @Override

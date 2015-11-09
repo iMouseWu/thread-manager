@@ -1,8 +1,6 @@
 package thread;
 
 import configuration.PoolConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import thread.constants.TaskStrategy;
 import thread.constants.ThreadStatus;
 import thread.dao.ExecutorTaskDao;
@@ -33,7 +31,19 @@ public class ExecutorTaskManagerImpl implements ExecutorTaskManager {
 
     private ExceptionTaskResolve exceptionTaskResolve;
 
-    private Logger logger = LoggerFactory.getLogger(ExecutorTaskManagerImpl.class);
+//    private Logger logger = LoggerFactory.getLogger(ExecutorTaskManagerImpl.class);
+
+    public void setPoolConfiguration(PoolConfiguration poolConfiguration) {
+        this.poolConfiguration = poolConfiguration;
+    }
+
+    public void setExecutorDao(ExecutorTaskDao executorDao) {
+        this.executorDao = executorDao;
+    }
+
+    public void setExceptionTaskResolve(ExceptionTaskResolve exceptionTaskResolve) {
+        this.exceptionTaskResolve = exceptionTaskResolve;
+    }
 
     @Override
     public void excute(final ExecutorTask executorTask) {
@@ -134,7 +144,8 @@ public class ExecutorTaskManagerImpl implements ExecutorTaskManager {
             } catch (Throwable e) {
                 ThreadDO threadDO = executorDao.selectExecutorTask(taskId, ip);
                 doAfterException(threadDO);
-                logger.error("", e);
+                System.out.print(e.getMessage());
+//                logger.error("", e);
             } finally {
 //                callBack(executorTask);
             }

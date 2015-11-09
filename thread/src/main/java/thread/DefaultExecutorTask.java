@@ -4,32 +4,52 @@ import thread.domain.TaskProperty;
 
 public class DefaultExecutorTask implements ExecutorTask {
 
+    private String taskId;
+
+    private String ip;
+
+    private String taskName;
+
+    private TaskProperty taskProperty;
+
     @Override
     public String getTaskId() {
-        return null;
+        return taskId;
     }
 
     @Override
     public String getIp() {
-        return null;
+        return ip;
     }
 
     @Override
     public String getTaskName() {
-        // TODO Auto-generated method stub
-        return null;
+        return taskName;
     }
 
     @Override
     public void execute() {
-        // TODO Auto-generated method stub
-
+        System.out.println(taskName + " execute");
     }
 
     @Override
     public TaskProperty getTaskProperty() {
-        // TODO Auto-generated method stub
-        return null;
+        return taskProperty;
     }
 
+    public void setTaskId(String taskId) {
+        this.taskId = taskId;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    public void setTaskName(String taskName) {
+        this.taskName = taskName;
+    }
+
+    public void setTaskProperty(TaskProperty taskProperty) {
+        this.taskProperty = taskProperty;
+    }
 }

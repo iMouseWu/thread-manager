@@ -26,8 +26,20 @@ public interface PoolConfiguration {
      */
     List<GroupPoolConfig> getGroupPoolConfig();
 
+    /**
+     * 根据线程优选级获取线程数量
+     *
+     * @param taskPriority 优先级
+     * @return 线程数量
+     */
     int getPriorityPoolCount(int taskPriority);
 
+    /**
+     * 根据任务组别获取线程数量
+     *
+     * @param groupId 组别
+     * @return 线程数量
+     */
     int getGroupPoolCount(int groupId);
 
     /**

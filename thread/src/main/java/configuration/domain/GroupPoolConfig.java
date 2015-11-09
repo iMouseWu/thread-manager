@@ -10,7 +10,7 @@ public class GroupPoolConfig {
     /**
      * 数量
      */
-    private int count;
+    private int threadCount;
 
     public int getGroupId() {
         return groupId;
@@ -20,12 +20,11 @@ public class GroupPoolConfig {
         this.groupId = groupId;
     }
 
-    public int getCount() {
-        return count;
+    public int getThreadCount() {
+        return threadCount;
     }
 
-    public void setCount(int count) {
-        this.count = count;
+    public void setThreadCount(int threadCount) {
+        this.threadCount = threadCount;
     }
-
 }
