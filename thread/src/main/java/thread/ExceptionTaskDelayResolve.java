@@ -18,11 +18,9 @@ public class ExceptionTaskDelayResolve implements ExceptionTaskResolve {
 	@Override
 	public void resolve() {
 		while (!Thread.interrupted()) {
-			System.out.println("INTO EXCEPTION RESPLVE");
 			ExceptionRetryTask exceptionRetryTask = null;
 			try {
 				exceptionRetryTask = delayQueue.take();
-				System.out.println(exceptionRetryTask.getTaskName() + "exception resolve ");
 				executorTaskManager.excute(exceptionRetryTask);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();

@@ -85,7 +85,7 @@ public class DefaultPoolConfiguration implements PoolConfiguration {
     @Override
     public long getNextExecuteTime(int retryTime) {
         long currentTime = System.currentTimeMillis();
-        if (retryTime <= 5) {
+        if (retryTime <= 4) {
             return currentTime + retryTime * 1L * 60 * 1000;
         }
         return 0;
