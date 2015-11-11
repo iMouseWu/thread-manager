@@ -13,7 +13,14 @@ public class ExecutorTaskDaoImpl implements ExecutorTaskDao {
 
 	@Override
 	public ThreadDO selectExecutorTask(String threadId, String threadIp) {
-		return threadMaps.get(generateThreadKey(threadId, threadIp));
+		ThreadDO threadDO = null;
+		synchronized (threadMaps) {
+			threadDO = threadMaps.get(generateThreadKey(threadId, threadIp));
+			if (null != threadDO && threadDO.getThreadStatus() == ThreadStatus.DELETE) {
+				threadDO = null;
+			}
+		}
+		return threadDO;
 	}
 
 	@Override

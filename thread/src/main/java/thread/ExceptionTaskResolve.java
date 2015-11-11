@@ -9,5 +9,4 @@ public interface ExceptionTaskResolve {
 
     void add(ExceptionRetryTask exceptionRetryTask);
 
-
 }

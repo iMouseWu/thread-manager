@@ -7,26 +7,32 @@ import java.util.concurrent.DelayQueue;
  */
 public class ExceptionTaskDelayResolve implements ExceptionTaskResolve {
 
-    private static DelayQueue<ExceptionRetryTask> delayQueue = new DelayQueue<>();
+	private static DelayQueue<ExceptionRetryTask> delayQueue = new DelayQueue<>();
 
-    private ExecutorTaskManager executorTaskManager;
+	private ExecutorTaskManager executorTaskManager;
 
-    @Override
-    public void resolve() {
-        while (Thread.interrupted()) {
-            ExceptionRetryTask exceptionRetryTask = null;
-            try {
-                exceptionRetryTask = delayQueue.take();
-                executorTaskManager.excute(exceptionRetryTask);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+	public void setExecutorTaskManager(ExecutorTaskManager executorTaskManager) {
+		this.executorTaskManager = executorTaskManager;
+	}
 
-        }
-    }
+	@Override
+	public void resolve() {
+		while (!Thread.interrupted()) {
+			System.out.println("INTO EXCEPTION RESPLVE");
+			ExceptionRetryTask exceptionRetryTask = null;
+			try {
+				exceptionRetryTask = delayQueue.take();
+				System.out.println(exceptionRetryTask.getTaskName() + "exception resolve ");
+				executorTaskManager.excute(exceptionRetryTask);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
 
-    @Override
-    public void add(ExceptionRetryTask exceptionRetryTask) {
-        delayQueue.offer(exceptionRetryTask);
-    }
+		}
+	}
+
+	@Override
+	public void add(ExceptionRetryTask exceptionRetryTask) {
+		delayQueue.offer(exceptionRetryTask);
+	}
 }
