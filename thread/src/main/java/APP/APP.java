@@ -10,6 +10,11 @@ import thread.ExecutorTaskManagerImpl;
 import thread.dao.ExecutorTaskDao;
 import thread.dao.ExecutorTaskDaoImpl;
 
+/**
+ * APP
+ * @author wuhao
+ *
+ */
 public class APP {
 
 	public static void main(String[] args) {
