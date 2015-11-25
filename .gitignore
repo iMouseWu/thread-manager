@@ -3,3 +3,10 @@
 *.project
 *.classpath
 /.setting/
+*.class
+# Package Files #
+*.jar
+*.war
+*.ear
+hs_err_pid*
+
