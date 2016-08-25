@@ -1,5 +1,3 @@
-package APP;
-
 import configuration.DefaultPoolConfiguration;
 import configuration.PoolConfiguration;
 import thread.DefaultExecutorTask;
@@ -40,7 +38,7 @@ public class APP {
 	private static ExecutorTaskManager init() {
 		ExecutorTaskManagerImpl executorTaskManager = new ExecutorTaskManagerImpl();
 
-		ExceptionTaskDelayResolve exceptionTaskResolve = new ExceptionTaskDelayResolve();
+		final ExceptionTaskDelayResolve exceptionTaskResolve = new ExceptionTaskDelayResolve();
 		executorTaskManager.setExceptionTaskResolve(exceptionTaskResolve);
 
 		ExecutorTaskDao executorTaskDao = new ExecutorTaskDaoImpl();
